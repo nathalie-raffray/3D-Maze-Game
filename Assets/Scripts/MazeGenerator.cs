@@ -86,7 +86,7 @@ public class MazeGenerator : MonoBehaviour
             {
                 for (var j = 0; j < 2; j++)
                 {
-                    //if (i == 0 && j == 0) continue;
+                    if (i == 0 && j == 0 || i==1 && j==1) continue;
                     if (((x = current.indexX + i) >= 0) && (current.indexX + i < 8))
                     {
                         if (((y = current.indexY + j) >= 0) && (current.indexY + j < 8))
@@ -108,13 +108,34 @@ public class MazeGenerator : MonoBehaviour
                             }
                         }
                     }
+                    if (((x = current.indexX - i) >= 0) && (current.indexX - i < 8))
+                    {
+                        if (((y = current.indexY - j) >= 0) && (current.indexY - j < 8))
+                        {
+                            if (graph[x, y].mstIn == false) //if not already in the MST
+                            {
+                                if (!(frontierNeighbours.Contains(graph[x, y]))) //if not already part of frontierNeighbours
+                                {
+                                    frontierNeighbours.Add(graph[x, y]);
+                                }
+
+                                graph[x, y].inNeighbours.Add(current);
+
+                                //else
+                                //{
+                                //    graph[x, y].inNeighbours.Add(current);
+                                //}
+
+                            }
+                        }
+                    }
                 }
             }
 
 
             int random = Random.Range(0, frontierNeighbours.Count); //will get a random result from 0 to frontierNeighbours.Count
             current = frontierNeighbours[random];
-            frontierNeighbours.RemoveAt(random+1); //remove current from frontierNeighbours
+            frontierNeighbours.Remove(current); //remove current from frontierNeighbours
 
 
             random = Random.Range(0, current.inNeighbours.Count);
