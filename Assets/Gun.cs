@@ -9,11 +9,15 @@ public class Gun : MonoBehaviour
     public float range = 100f;
 
     public GameObject bulletPrefab;
-    public GameObject capsule;
+   
 
+    public bool bulletFired;
+
+    public int count;
 
     public Camera fpsCam;
-    private int count;
+    public GameObject capsule;
+  //  private int count;
 
    // private bool bulletShot;
 
@@ -21,22 +25,36 @@ public class Gun : MonoBehaviour
     void Start()
     {
         count = 0;
+        bulletFired = false;
         //bulletShot = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButton(0)){
-            Shoot();
+        if(Input.GetMouseButton(0) && !bulletFired){ //if left click is pressed and bullet is not already fired
+            bulletFired = true;
+
             GameObject bulletObject = Instantiate(bulletPrefab);
-            bulletObject.transform.position = transform.position; 
+            //StartCoroutine(Shoot());
+            //Shoot();
+            //GameObject bulletObject = Instantiate(bulletPrefab);
+
             //bulletObject.transform.forward = fpsCam.transform.forward;
-            bulletObject.transform.forward = capsule.transform.forward;
+            //bulletObject.transform.forward = capsule.transform.forward;
+        }
+        if(count == 3){
+            
+                //drop key
         }
     }
 
-    void Shoot(){
+    private IEnumerator Shoot(){
+        bulletFired = true;
+        GameObject bulletObject = Instantiate(bulletPrefab);
+            
+
+        yield return null;
             //RaycastHit hit;
             //if(Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range)){
 

@@ -7,6 +7,7 @@ public class MazeGenerator : MonoBehaviour
 
     public GameObject tilePrefab;
     public GameObject treeWallPrefab;
+    public GameObject pathTilePrefab;
 
     public float xPos;
     public float yPos;
@@ -47,6 +48,11 @@ public class MazeGenerator : MonoBehaviour
             this.indexY = y;
         }
 
+        public string toString(){
+            string s = "IndexX: " + indexX + ", IndexY: " + indexY;
+            return s;
+        }
+
     }
 
     private void Prim(){
@@ -76,11 +82,11 @@ public class MazeGenerator : MonoBehaviour
         var x = 0;
         var y = 0;
         MazeNode connectingVertex;
+        current.mstIn = true;
+        //current.inNeighbours.Clear();
 
         do
         {
-            current.mstIn = true;
-            current.inNeighbours.Clear();
 
             for (var i = 0; i < 2; i++) //add the current's neighbours not already in MST to frontier neighbours
             {
@@ -121,10 +127,6 @@ public class MazeGenerator : MonoBehaviour
 
                                 graph[x, y].inNeighbours.Add(current);
 
-                                //else
-                                //{
-                                //    graph[x, y].inNeighbours.Add(current);
-                                //}
 
                             }
                         }
@@ -144,12 +146,26 @@ public class MazeGenerator : MonoBehaviour
             current.neighbourNodes.Add(connectingVertex);   //connect the new node to one of its random inNeighbors
             connectingVertex.neighbourNodes.Add(current);   //connect its in neighbor to itself
 
+            current.mstIn = true;
+            current.inNeighbours.Clear();
+
+            printFrontier();
+
+           // Debug.Log("Frontier neighbours: " + frontierNeighbours);
 
         } while (frontierNeighbours.Count > 0);
 
         //frontierNeighbours.add(graph[current.coordinates.x + 1, current.coordi)
 
 
+    }
+
+    public void printFrontier(){
+        string s = "Frontier Neighbours: ";
+        for (var i = 0; i < frontierNeighbours.Count; i++){
+            s += i + ": " + frontierNeighbours[i].toString() + ", ";
+        }
+        Debug.Log(s);
     }
 
     private void drawWalls(){
@@ -190,7 +206,7 @@ public class MazeGenerator : MonoBehaviour
             {
                 if (!(graph[i, j].neighbourNodes.Contains(graph[i, j+1])))
                 {
-                    Instantiate(treeWallPrefab, new Vector3(((xPos - 5) - 10 * (i)), yPos, ((zPos - 5) + 10 * (j))), Quaternion.identity);
+                    Instantiate(treeWallPrefab, new Vector3(((xPos + 5) - 10 * (i)), yPos, ((zPos + 5) + 10 * (j))), Quaternion.identity);
                 }
             }
         }
@@ -206,6 +222,56 @@ public class MazeGenerator : MonoBehaviour
 
             }
         }
+
+        //FIND THE SHORTEST PATH TO THE EXIT USING DFS
+        Stack<MazeNode> myStack = new Stack<MazeNode>();
+        List<MazeNode> shortestPath = new List<MazeNode>();
+        myStack.Push(graph[4, 0]); //add the root
+
+        do
+        {
+            //current = graph[4, 0]
+            current = myStack.Pop();
+            shortestPath.Add(current);
+
+            if (current == exit)
+            { //done
+                break;
+            }
+
+            bool remove = true;
+
+            for (var i = 0; i < current.neighbourNodes.Count; i++)
+            {
+                if (current.neighbourNodes[i].visited == false)
+                {
+                    myStack.Push(current.neighbourNodes[i]);
+                    current.neighbourNodes[i].visited = true;
+                    remove = false;
+                }
+            }
+
+            if (remove)
+            {
+                shortestPath.RemoveAt(shortestPath.Count);
+            }
+
+        } while (myStack.Count > 0);
+
+
+        for (var i = 0; i < shortestPath.Count; i++){
+            
+        }
+
+
+
+
+        //if(current.neighbourNodes.Count == 0){
+        //    shortestPath.removeAt(shortestPath.Count);
+        //}
+
+
+
 
         //rotate it
 

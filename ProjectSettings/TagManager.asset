@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MazeTile
   - killme
+  - terrain
   layers:
   - Default
   - TransparentFX
