@@ -1,10 +1,13 @@
 ﻿<Properties StartupConfiguration="{CBEE44B2-AC02-2D81-086E-310C52B2BE1D}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MazeGenerator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/characterController.cs">
     <Files>
-      <File FileName="Assets/Scripts/characterController.cs" Line="26" Column="50" />
       <File FileName="Assets/Scripts/camMouseLock.cs" Line="4" Column="1" />
-      <File FileName="Assets/Scripts/MazeGenerator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/MazeGenerator.cs" Line="236" Column="5" />
+      <File FileName="Assets/Scripts/Gun.cs" Line="47" Column="30" />
+      <File FileName="Assets/Scripts/Bullet.cs" Line="53" Column="5" />
+      <File FileName="Assets/Scripts/floatingObjects.cs" Line="16" Column="50" />
+      <File FileName="Assets/Scripts/characterController.cs" Line="101" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

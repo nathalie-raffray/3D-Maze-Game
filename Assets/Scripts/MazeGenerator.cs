@@ -68,9 +68,9 @@ public class MazeGenerator : MonoBehaviour
         //graph[0, 4] = root;
 
         //choosing random indices to get the exit mazenode. 
-        int randomX = 4;
-        int randomY = 0;
-        while(randomX == 4 && randomY == 0){ //we don't want the exit to be the same as the root. 
+        int randomX = 7;
+        int randomY = 4;
+        while(randomX == 7 && randomY == 4){ //we don't want the exit to be the same as the root. 
             randomX = Random.Range(0, 8);
             randomY = Random.Range(0, 8);
         }
@@ -78,7 +78,7 @@ public class MazeGenerator : MonoBehaviour
 
 
         //this is our root
-        current = graph[4, 0];
+        current = graph[7, 4];
         var x = 0;
         var y = 0;
         MazeNode connectingVertex;
@@ -105,11 +105,6 @@ public class MazeGenerator : MonoBehaviour
                                 }
 
                                 graph[x, y].inNeighbours.Add(current);
-
-                                //else
-                                //{
-                                //    graph[x, y].inNeighbours.Add(current);
-                                //}
 
                             }
                         }
@@ -222,20 +217,46 @@ public class MazeGenerator : MonoBehaviour
 
             }
         }
+        GameObject doorToMaze;
+        //make trees surround the whole maze
+        for (var i = 0; i < 8; i++){ 
+            Instantiate(treeWallPrefab, new Vector3((xPos + 5), yPos, ((zPos - 5) + 10 * (i))), Quaternion.AngleAxis(90, Vector3.up)); //create a line of trees on left side of maze
+            Instantiate(treeWallPrefab, new Vector3((xPos -5 -10*7), yPos, ((zPos - 5) + 10 * (i))), Quaternion.AngleAxis(90, Vector3.up)); //create a line of trees on right side of maze
+
+            Instantiate(treeWallPrefab, new Vector3((xPos + 5 -10*(i)), yPos, (zPos - 5)), Quaternion.identity); //create a line of trees on north side of maze
+
+            if(((xPos + 5 - 10 * i) == 140) && ((zPos - 5) + 10 * 8) == 180){
+                doorToMaze = Instantiate(treeWallPrefab, new Vector3((xPos + 5 - 10 * (i)), yPos, ((zPos - 5) + 10 * 8)), Quaternion.identity); //create a line of trees on south side of maze
+                doorToMaze.gameObject.name = "entry";
+            }else{
+                Instantiate(treeWallPrefab, new Vector3((xPos + 5 - 10 * i), yPos, ((zPos - 5) + 10 * 8)), Quaternion.identity); //create a line of trees on south side of maze
+             }
+        }
+
+    
+
+
 
         //FIND THE SHORTEST PATH TO THE EXIT USING DFS
         Stack<MazeNode> myStack = new Stack<MazeNode>();
         List<MazeNode> shortestPath = new List<MazeNode>();
-        myStack.Push(graph[4, 0]); //add the root
+        myStack.Push(graph[4, 7]); //add the root
 
         do
         {
             //current = graph[4, 0]
             current = myStack.Pop();
-            shortestPath.Add(current);
+            if (!shortestPath.Contains(current))
+            {
+                shortestPath.Add(current);
+            }
+
 
             if (current == exit)
             { //done
+                Debug.Log("HEEYYY");
+                Debug.Log("shortestPath.Count: " + shortestPath.Count);
+                Debug.Log("exit: " + exit.indexX + ", " + exit.indexY);
                 break;
             }
 
@@ -253,15 +274,23 @@ public class MazeGenerator : MonoBehaviour
 
             if (remove)
             {
-                shortestPath.RemoveAt(shortestPath.Count);
+                shortestPath.RemoveAt(shortestPath.Count-1);
             }
 
         } while (myStack.Count > 0);
 
 
-        for (var i = 0; i < shortestPath.Count; i++){
-            
+
+        if(shortestPath.Count <= 16){
+            for (var i = 0; i < shortestPath.Count; i++)
+            { //now draw tiles leading to the path
+                Instantiate(pathTilePrefab, new Vector3((xPos - 10 * shortestPath[i].indexX), yPos, (zPos + 10 * shortestPath[i].indexY)), Quaternion.identity);
+            }
+        }else{
+            //prim again
         }
+
+
 
 
 

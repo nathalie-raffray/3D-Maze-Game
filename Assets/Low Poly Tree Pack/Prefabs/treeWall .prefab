@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!65 &1799779977322456672
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7684044340340690088}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8.901703, y: 9.291159, z: 1}
+  m_Center: {x: -3.9508524, y: 4.1455793, z: 0}
 --- !u!1001 &7684580684637344170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -287,6 +300,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'treeWall '
       objectReference: {fileID: 0}
+    - target: {fileID: 1733889255798474, guid: a2df9935365c3034ab671013f5cd8353, type: 3}
+      propertyPath: m_TagString
+      value: terrain
+      objectReference: {fileID: 0}
     - target: {fileID: 4476499043994702, guid: a2df9935365c3034ab671013f5cd8353, type: 3}
       propertyPath: m_LocalPosition.x
       value: 51.22
@@ -341,6 +358,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2df9935365c3034ab671013f5cd8353, type: 3}
+--- !u!1 &7684044340340690088 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1733889255798474, guid: a2df9935365c3034ab671013f5cd8353,
+    type: 3}
+  m_PrefabInstance: {fileID: 7684580685338671714}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7686230802592085548 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4476499043994702, guid: a2df9935365c3034ab671013f5cd8353,

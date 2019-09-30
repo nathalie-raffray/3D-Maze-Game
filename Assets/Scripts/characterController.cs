@@ -5,7 +5,7 @@ using UnityEngine;
 public class characterController : MonoBehaviour
 {
 
-    public float speed = 100.0F;
+    public float speed = 30.0F;
     //public float jumpSpeed = 400.0F;
 
     private bool isJumping;
@@ -51,21 +51,24 @@ public class characterController : MonoBehaviour
 
         //if escape is pressed the cursor will become visible again
         if (Input.GetKeyDown("escape")) Cursor.lockState = CursorLockMode.None;
-     
+
 
 
     }
 
-    private void JumpInput(){
+    private void JumpInput()
+    {
         //if (space is pressed && the character is not already jumping)
         //this is to prevent the character from jumping again while in the air
-        if(Input.GetKeyDown(jumpKey) && !isJumping){
+        if (Input.GetKeyDown(jumpKey) && !isJumping)
+        {
             isJumping = true;
             StartCoroutine(JumpEvent());    //use Coroutine so that if space is pressed, the character will jump along multiple frames, instead of only the initial one.
         }
     }
 
-    private IEnumerator JumpEvent(){
+    private IEnumerator JumpEvent()
+    {
 
         float timeInAir = 0f;
 
@@ -94,6 +97,15 @@ public class characterController : MonoBehaviour
     //private bool isGrounded(){
     //return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
     //}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "key")
+        {
+            Destroy(other.gameObject);
+            //open the fucking maze
+        }
+    }
 }
 
 
