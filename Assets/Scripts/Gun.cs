@@ -18,7 +18,7 @@ public class Gun : MonoBehaviour
 
     public Camera fpsCam;
     public GameObject capsule;
-    private bool keyDropped;
+   // private bool keyDropped;
   //  private int count;
 
    // private bool bulletShot;
@@ -28,7 +28,7 @@ public class Gun : MonoBehaviour
     {
         count = 0;
         bulletFired = false;
-        keyDropped = false;
+       // keyDropped = false;
         //bulletShot = false;
     }
 
@@ -46,19 +46,16 @@ public class Gun : MonoBehaviour
             //bulletObject.transform.forward = fpsCam.transform.forward;
             //bulletObject.transform.forward = capsule.transform.forward;
         }
-        if((count == 3) && !keyDropped){
+        if((count == 3)){
             Debug.Log("hey");
-            Instantiate(key, new Vector3(150, 30, 250), Quaternion.identity);
-            keyDropped = true;
-
+            Instantiate(key, new Vector3(135.33f, 50, 193.24f), Quaternion.identity);
+            // keyDropped = true;
+            count = 4; ///that way we don't instantiate more keys
             //drop key
         }
 
 
-        //make the maze open at one point specified by root which is at index (7,4)
-        //if key drops
-        //GameObject entry = GameObject.Find("entry");
-        //Destroy(entry);
+       
     }
 
     private IEnumerator Shoot(){

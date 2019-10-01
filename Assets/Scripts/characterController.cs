@@ -98,12 +98,17 @@ public class characterController : MonoBehaviour
     //return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
     //}
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if(other.tag == "key")
+        Debug.Log("collided");
+        if(collision.gameObject.tag == "key")
         {
-            Destroy(other.gameObject);
+            Destroy(collision.gameObject);
             //open the fucking maze
+            //make the maze open at one point specified by root which is at index (7,4)
+            //if key drops
+            GameObject entry = GameObject.Find("entry");
+            Destroy(entry);
         }
     }
 }
