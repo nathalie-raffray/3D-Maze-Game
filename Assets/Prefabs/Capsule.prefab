@@ -15,6 +15,7 @@ MonoBehaviour:
   range: 100
   bulletPrefab: {fileID: 4652879383486957974, guid: f7470e73be6c54fd5ba530134c59f453,
     type: 3}
+  key: {fileID: 1803124164, guid: 2c6c45b29558f4a56868e5776fa067f6, type: 3}
   bulletFired: 0
   count: 0
   fpsCam: {fileID: 7569993773307959904}
@@ -106,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ebe54c0e28574958986e5327267349a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 0.5
+  sensitivity: 1
   smoothing: 2
 --- !u!81 &7569993773307959935
 AudioListener:
@@ -224,7 +225,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2be60fc3e84d640299197400c08a6930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 30
+  pathTilePrefab: {fileID: 8583711793108290644, guid: 7e78d4069accb428280a6362684e7fb3,
+    type: 3}
   jumpFallOff:
     serializedVersion: 2
     m_Curve:
@@ -249,7 +252,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  jumpMultiplier: 25
+  jumpMultiplier: 20
   jumpKey: 32
 --- !u!143 &7569993773971762699
 CharacterController:
@@ -285,22 +288,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000,
         type: 0}
-    - target: {fileID: 400000, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.23600006
@@ -356,6 +343,18 @@ PrefabInstance:
     - target: {fileID: 400016, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}
       propertyPath: m_LocalScale.z
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 857ed5547d243429584a3898e9dc51c6, type: 3}

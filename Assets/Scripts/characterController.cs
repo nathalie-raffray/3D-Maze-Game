@@ -10,6 +10,8 @@ public class characterController : MonoBehaviour
 
     private bool isJumping;
 
+    public GameObject pathTilePrefab;
+
     //use AnimationCurve to specify how we jump
     [SerializeField] private AnimationCurve jumpFallOff;
     [SerializeField] private float jumpMultiplier;
@@ -42,15 +44,20 @@ public class characterController : MonoBehaviour
 
         charController.SimpleMove(forwardMovement + rightMovement);
 
-        //translation *= Time.deltaTime;
-        //straffe *= Time.deltaTime;
-
-        //transform.Translate(straffe, 0, translation); //why this weird behavior when I use this, and jump?
 
         JumpInput();
 
         //if escape is pressed the cursor will become visible again
         if (Input.GetKeyDown("escape")) Cursor.lockState = CursorLockMode.None;
+
+        //135.33f, 50, 193.24f
+        //DELEEET LATER
+        //if(transform.position.x <=138 && transform.position.x >= 132 && transform.position.z <= 196 && transform.position.x >= 190)
+        //{
+        //    GameObject entry = GameObject.Find("entry");
+        //    Destroy(entry);
+        //    Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored.
+        //}
 
 
 
@@ -91,13 +98,6 @@ public class characterController : MonoBehaviour
 
     }
 
-    // private float distToGround;
-    // get the distance to ground
-    //distToGround = GetComponent<Collider>().bounds.extents.y;
-    //private bool isGrounded(){
-    //return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
-    //}
-
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("collided");
@@ -109,6 +109,7 @@ public class characterController : MonoBehaviour
             //if key drops
             GameObject entry = GameObject.Find("entry");
             Destroy(entry);
+            Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored.
         }
     }
 }
