@@ -17,7 +17,9 @@ public class Gun : MonoBehaviour
     public int count;
 
     public Camera fpsCam;
-    public GameObject capsule;
+    public GameObject player;
+
+    private bool playerInsideMaze;
    // private bool keyDropped;
   //  private int count;
 
@@ -32,10 +34,14 @@ public class Gun : MonoBehaviour
         //bulletShot = false;
     }
 
+
+
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButton(0) && !bulletFired){ //if left click is pressed and bullet is not already fired
+        Vector3 pos = player.transform.position;
+        playerInsideMaze = ((pos.x <= 174 && pos.x >= 96) && (pos.z <= 179 && pos.z >= 101));
+        if (Input.GetMouseButton(0) && !bulletFired && !playerInsideMaze){ //if left click is pressed and bullet is not already fired
             bulletFired = true;
 
             GameObject bulletObject = Instantiate(bulletPrefab);
@@ -44,7 +50,7 @@ public class Gun : MonoBehaviour
             //GameObject bulletObject = Instantiate(bulletPrefab);
 
             //bulletObject.transform.forward = fpsCam.transform.forward;
-            //bulletObject.transform.forward = capsule.transform.forward;
+            //bulletObject.transform.forward = player.transform.forward;
         }
         if((count == 3)){
             Debug.Log("hey");

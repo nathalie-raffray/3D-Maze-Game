@@ -19,6 +19,7 @@ public class characterController : MonoBehaviour
 
     //use CharacterController to customize gravity for jumping, as well as to use the isGrounded attribute.
     private CharacterController charController;
+    private bool playerInsideMaze;
 
     // Start is called before the first frame update
     void Start()
@@ -62,12 +63,25 @@ public class characterController : MonoBehaviour
 
 
     }
+    private bool goodToGo;
 
     private void JumpInput()
     {
         //if (space is pressed && the character is not already jumping)
         //this is to prevent the character from jumping again while in the air
-        if (Input.GetKeyDown(jumpKey) && !isJumping)
+        Vector3 pos = transform.position;
+        playerInsideMaze = ((pos.x <= 174 && pos.x >= 96) && (pos.z <= 179 && pos.z >= 101));
+        goodToGo = true;
+
+
+        if (playerInsideMaze)
+        {
+            if (charController.velocity.x != 0 && charController.velocity.z != 0) //this is so the player cannot jump and move at the same time inside the maze
+            {
+                goodToGo = false;
+            }
+        }
+        if (Input.GetKeyDown(jumpKey) && !isJumping && goodToGo)
         {
             isJumping = true;
             StartCoroutine(JumpEvent());    //use Coroutine so that if space is pressed, the character will jump along multiple frames, instead of only the initial one.
@@ -122,17 +136,11 @@ public class characterController : MonoBehaviour
         {
             Destroy(hit.gameObject);
             //open the fucking maze
-            //make the maze open at one point specified by root which is at index (7,4)
-            //if key drops
             GameObject entry = GameObject.Find("entry");
             Destroy(entry);
             Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored.
         }
 
-        //if(hit.gameObject.tag == "MazeTile")
-        //{
-        //    MazeGenerator2.hitTile = hit.gameObject;
-        //}
     }
 
     void OnTriggerEnter(Collider other)
@@ -141,6 +149,8 @@ public class characterController : MonoBehaviour
             MazeGenerator2.hitTile = other.gameObject;
         }
     }
+
+
 }
 
 

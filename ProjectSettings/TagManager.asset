@@ -9,6 +9,7 @@ TagManager:
   - terrain
   - key
   - MazeWall
+  - OuterMazeWall
   layers:
   - Default
   - TransparentFX

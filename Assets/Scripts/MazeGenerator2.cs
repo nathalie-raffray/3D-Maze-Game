@@ -8,6 +8,8 @@ public class MazeGenerator2 : MonoBehaviour
     public GameObject tilePrefab;
     public GameObject treeWallPrefab;
     public GameObject pathTilePrefab;
+    public GameObject bigAssZombie;
+    public GameObject zombie;
 
     public float xPos;
     public float yPos;
@@ -23,13 +25,18 @@ public class MazeGenerator2 : MonoBehaviour
 
     private Stack<MazeNode> myStack = new Stack<MazeNode>();
     private List<MazeNode> shortestPath = new List<MazeNode>();
-    private bool exitFound = false;
+    private bool exitFound;
 
    // private MazeNode[,,] fifteenGraphs = new MazeNode[8, 8, 15];
-    private MazeNode[][,] fifteenGraphs = new MazeNode[15][, ];
+    private MazeNode[][,] sixteenGraphs = new MazeNode[16][, ];
     //double[][] x = new double[5][];
 
     private GameObject player;
+
+    private int stepCount;
+    private bool stepTaken;
+    private bool playerInsideMaze;
+    private bool win;
 
 
 
@@ -115,15 +122,9 @@ public class MazeGenerator2 : MonoBehaviour
             current.mstIn = true;
             //current.inNeighbours.Clear();
         }
-        //else if(step == 15) //last exit
-        //{
-        //    current = shortestPath[step];
-        //    current = g[current.indexX, current.indexY];
-        //    current.mstIn = true;
-        //}
         else
         {
-            if( (step+1) > shortestPath.Count-1) //this is for if the path from start to exit is of length < 16 (say it is of x length),
+            if( (step) > shortestPath.Count-1) //this is for if the path from start to exit is of length < 16 (say it is of x length),
                                                     //but the player is taking more than x time to complete the maze.
                                                     //in this case, we still want the path from the (exit-1) tile to the exit tile to be traversable.
             {
@@ -132,8 +133,10 @@ public class MazeGenerator2 : MonoBehaviour
             }
             else
             {
-                n1 = shortestPath[step];
-                n2 = shortestPath[step + 1];
+                //n1 = shortestPath[step];
+                //n2 = shortestPath[step + 1];
+                n1 = shortestPath[step-1];
+                n2 = shortestPath[step];
             }
 
 
@@ -243,6 +246,11 @@ public class MazeGenerator2 : MonoBehaviour
     {
 
         player = GameObject.Find("Capsule");
+        exitFound = false;
+        stepCount = 0;
+        stepTaken = false;
+        playerInsideMaze = false;
+        win = false;
 
         Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored. 
 
@@ -258,21 +266,25 @@ public class MazeGenerator2 : MonoBehaviour
 
 
         GameObject doorToMaze; //this is the tree wall which will disappear upon obtaining the key. 
+        GameObject temp;
         for (var i = 0; i < 8; i++) //make trees surround the whole maze
         {
-            Instantiate(treeWallPrefab, new Vector3((xPos + 5), yPos, ((zPos - 5) + 10 * (i))), Quaternion.AngleAxis(90, Vector3.up)); //create a line of trees on left side of maze
-            Instantiate(treeWallPrefab, new Vector3((xPos - 5 - 10 * 7), yPos, ((zPos - 5) + 10 * (i))), Quaternion.AngleAxis(90, Vector3.up)); //create a line of trees on right side of maze
-
-            Instantiate(treeWallPrefab, new Vector3((xPos + 5 - 10 * (i)), yPos, (zPos - 5)), Quaternion.identity); //create a line of trees on north side of maze
-
+            temp = Instantiate(treeWallPrefab, new Vector3((xPos + 5), yPos, ((zPos - 5) + 10 * (i))), Quaternion.AngleAxis(90, Vector3.up)); //create a line of trees on left side of maze
+            temp.gameObject.tag = "OuterMazeWall";
+            temp = Instantiate(treeWallPrefab, new Vector3((xPos - 5 - 10 * 7), yPos, ((zPos - 5) + 10 * (i))), Quaternion.AngleAxis(90, Vector3.up)); //create a line of trees on right side of maze
+            temp.gameObject.tag = "OuterMazeWall";
+            temp = Instantiate(treeWallPrefab, new Vector3((xPos + 5 - 10 * (i)), yPos, (zPos - 5)), Quaternion.identity); //create a line of trees on north side of maze
+            temp.gameObject.tag = "OuterMazeWall";
             if (((xPos + 5 - 10 * i) == 140) && ((zPos - 5) + 10 * 8) == 175)
             {
                 doorToMaze = Instantiate(treeWallPrefab, new Vector3((xPos + 5 - 10 * (i)), yPos, ((zPos - 5) + 10 * 8)), Quaternion.identity); //create a line of trees on south side of maze
                 doorToMaze.gameObject.name = "entry";
+                doorToMaze.gameObject.tag = "OuterMazeWall";
             }
             else
             {
-                Instantiate(treeWallPrefab, new Vector3((xPos + 5 - 10 * i), yPos, ((zPos - 5) + 10 * 8)), Quaternion.identity); //create a line of trees on south side of maze
+                temp = Instantiate(treeWallPrefab, new Vector3((xPos + 5 - 10 * i), yPos, ((zPos - 5) + 10 * 8)), Quaternion.identity); //create a line of trees on south side of maze
+                temp.gameObject.tag = "OuterMazeWall";
             }
         }
 
@@ -313,11 +325,11 @@ public class MazeGenerator2 : MonoBehaviour
         //    Instantiate(pathTilePrefab, new Vector3((xPos - 10 * shortestPath[i].indexX), yPos, (zPos + 10 * shortestPath[i].indexY)), Quaternion.identity);
         //}
 
-        for(var i = 0; i<15; i++)
+        for(var i = 0; i<16; i++)
         {
             //creates the remaining 15 pregenerated mazes 
-            fifteenGraphs[i] = new MazeNode[8, 8];
-            Prim(fifteenGraphs[i], i + 1);
+            sixteenGraphs[i] = new MazeNode[8, 8];
+            Prim(sixteenGraphs[i], i + 1);
         }
 
     }
@@ -399,18 +411,15 @@ public class MazeGenerator2 : MonoBehaviour
         }
     }
 
-    private int[] playerTilePosition = { 4, 7 }; //start at root
-    private float minLimitX = 130; //left
-    private float maxLimitX = 140; //right
-    private float minLimitZ = 95; //bottom
-    private float maxLimitZ = 105; //top
-    private int stepCount = 0;
-    private bool stepTaken = false;
-    private bool playerInsideMaze = false;
+
+    //private int stepCount = 0;
+    //private bool stepTaken = false;
+    //private bool playerInsideMaze = false;
+    //private bool win = false;
     private GameObject[] oldMazeWalls;
-    //private GameObject currentTile;
     public static GameObject hitTile;
     private GameObject currentTile;
+
 
     // Update is called once per frame
     void Update()
@@ -421,47 +430,54 @@ public class MazeGenerator2 : MonoBehaviour
         if (playerInsideMaze)
         {
             //checking to see when the player is traversing tiles
-            if(hitTile != null && hitTile != currentTile || hitTile!=null && currentTile==null) //second condition is for when the player first enters
-                                                                                                //the maze and currentTile = null.
+            if (hitTile != null && hitTile != currentTile || hitTile != null && currentTile == null) //second condition is for when the player first enters
+                                                                                                     //the maze and currentTile = null.
             {
                 stepTaken = true;
                 stepCount++;
                 currentTile = hitTile;
+                Debug.Log("HIT BY " + hitTile.transform.position);
+                Debug.Log("CURRENT TILE " + currentTile.transform.position);
+                Debug.Log("STEPCOUNT = " + stepCount);
+
+                if ( ((xPos - 10 * exit.indexX) == hitTile.transform.position.x) && ((zPos + 10 * exit.indexY) == hitTile.transform.position.z) )
+                {
+                    win = true;
+                }
+
+                //Instantiate(tilePrefab, new Vector3((xPos - 10 * i), yPos, (zPos + 10 * j)), Quaternion.identity);
             }
 
-            //if (pos.x <= minLimitX)
-            //{
-            //    minLimitX -= 10;
-            //    maxLimitX -= 10;
-            //    stepCount++;
-            //    stepTaken = true;
-            //}
-            //else if (pos.x >= maxLimitX)
-            //{
-            //    minLimitX += 10;
-            //    maxLimitX += 10;
-            //    stepCount++;
-            //    stepTaken = true;
-            //}
-            //else if (pos.x <= minLimitZ)
-            //{
-            //    minLimitZ -= 10;
-            //    maxLimitZ -= 10;
-            //    stepCount++;
-            //    stepTaken = true;
-            //}
-            //else if (pos.x >= maxLimitZ)
-            //{
-            //    minLimitZ += 10;
-            //    maxLimitZ += 10;
-            //    stepCount++;
-            //    stepTaken = true;
-            //}
+            if (win)
+            {
+                //notify winner
+                Debug.Log("WIN");
+                RestartMaze();
+                //take player back to start
+                player.transform.position = new Vector3(100, 0, 450);
+                Instantiate(bigAssZombie, new Vector3(142.3f, 0, 321.5f), Quaternion.identity);
+                //for(var i = 0; i<50; i++)
+                //{
+                //    Instantiate(zombie, new Vector3(142.3f, 40, 321.5f), Quaternion.identity);
+                //}
 
-            if (stepCount >= 16)
+            }
+            if (Input.GetKeyDown("escape"))
+            {
+                //restart maze
+                RestartMaze();
+            }
+
+
+            if (stepCount > 16) //i allow 17 steps, because one step is counted to get into the maze, 16 more steps are allowed once 
+                               //inside the maze
             {
                 //if(stepCount==16){
                 //checkif we reached the exit tile, if not then reset the maze
+
+                Debug.Log("BUSTED KIDDO");
+                RestartMaze();
+                //you lose
 
                 //start maze over again
                 //terminate maze
@@ -482,18 +498,22 @@ public class MazeGenerator2 : MonoBehaviour
                 {
                     coloredTile = shortestPath.Count - 1;
                 }
+
                 Instantiate(pathTilePrefab, new Vector3((xPos - 10 * shortestPath[coloredTile].indexX),
                 yPos, (zPos + (10 * shortestPath[coloredTile].indexY))), Quaternion.identity); //create the next tile in maze solution (colored)
+
 
                 for (var i = 0; i < oldMazeWalls.Length; i++)
                 {
                     Destroy(oldMazeWalls[i]);
                 }
-                CreateMazeWalls(fifteenGraphs[stepCount - 1]);
+                CreateMazeWalls(sixteenGraphs[stepCount - 1]);
             }
 
 
 
+
+           
             //var gameObjects : GameObject[];
             //gameObjects = GameObject.FindGameObjectsWithTag("yourTag");
 
@@ -502,5 +522,44 @@ public class MazeGenerator2 : MonoBehaviour
             //}
         }
 
+
+    }
+
+    private void RestartMaze()
+    {
+
+        player.transform.position = new Vector3(135, 0, 185);
+
+        stepTaken = false;
+        stepCount = 0;
+        shortestPath.Clear();
+        myStack.Clear();
+        frontierNeighbours.Clear();
+        currentTile = null;
+        hitTile = null;
+        graph = new MazeNode[8,8];
+       
+
+        GameObject[] tiles = GameObject.FindGameObjectsWithTag("MazeTile");
+
+        for(var i =0; i<tiles.Length; i++)
+        {
+            Destroy(tiles[i]);
+        }
+
+        GameObject[] walls = GameObject.FindGameObjectsWithTag("MazeWall");
+
+        for (var i = 0; i < walls.Length; i++)
+        {
+            Destroy(walls[i]);
+        }
+
+        GameObject[] outerWalls = GameObject.FindGameObjectsWithTag("OuterMazeWall");
+        for (var i = 0; i < outerWalls.Length; i++)
+        {
+            Destroy(outerWalls[i]);
+        }
+        Start();
+        Destroy(GameObject.Find("entry"));
     }
 }
