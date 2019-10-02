@@ -16,8 +16,6 @@ public class MazeGenerator2 : MonoBehaviour
     public float yPos;
     public float zPos;
 
-    // private bool[8][7] horizWall;
-    //private bool[7][8] vertWall;
 
     private MazeNode[,] graph = new MazeNode[8, 8];
     private List<MazeNode> frontierNeighbours = new List<MazeNode>();
@@ -28,16 +26,14 @@ public class MazeGenerator2 : MonoBehaviour
     private List<MazeNode> shortestPath = new List<MazeNode>();
     private bool exitFound;
 
-   // private MazeNode[,,] fifteenGraphs = new MazeNode[8, 8, 15];
     private MazeNode[][,] sixteenGraphs = new MazeNode[16][, ];
-    //double[][] x = new double[5][];
 
     private GameObject player;
 
     private int stepCount;
     private bool stepTaken;
     private bool playerInsideMaze;
-    private bool win;
+    public static bool win;
 
 
 
@@ -121,7 +117,6 @@ public class MazeGenerator2 : MonoBehaviour
             //this is our root
             current = g[7, 4];
             current.mstIn = true;
-            //current.inNeighbours.Clear();
         }
         else
         {
@@ -134,8 +129,6 @@ public class MazeGenerator2 : MonoBehaviour
             }
             else
             {
-                //n1 = shortestPath[step];
-                //n2 = shortestPath[step + 1];
                 n1 = shortestPath[step-1];
                 n2 = shortestPath[step];
             }
@@ -149,7 +142,7 @@ public class MazeGenerator2 : MonoBehaviour
             n2.neighbourNodes.Add(n1);
 
             n1.mstIn = true;
-            //n2.mstIn = true;
+            n2.mstIn = true;
 
             addFrontierAndInNeighbours(n1);
             current = n2;
@@ -295,16 +288,14 @@ public class MazeGenerator2 : MonoBehaviour
 
 
         CreateMazeWalls(graph);
+        int pathLength;
 
         myStack.Push(graph[4, 7]); //add the root
-        var pathLength = 20; //arbitrary number. 
 
-        while (pathLength > 17) //for up to 16 steps, then the path from entry to exit may consist of a maximum of 17 tiles. 
+        do
         {
 
             exit = getRandomExit();
-
-
             //exit = graph[6, 7];
 
 
@@ -321,67 +312,68 @@ public class MazeGenerator2 : MonoBehaviour
             Debug.Log("exit, indexX: " + exit.indexX + "indexY: " + exit.indexY);
 
             pathLength = shortestPath.Count;
-        }
-
-        Instantiate(exitTilePrefab, new Vector3((xPos - 10 * exit.indexX), yPos, (zPos + 10 * exit.indexY)), Quaternion.identity); //make a colored exit tile
-
-        //for (var i = 0; i < shortestPath.Count; i++)
-        //{ //now draw tiles leading to the path
-        //    Instantiate(pathTilePrefab, new Vector3((xPos - 10 * shortestPath[i].indexX), yPos, (zPos + 10 * shortestPath[i].indexY)), Quaternion.identity);
-        //}
-
-        for(var i = 0; i<16; i++)
-        {
-            //creates the remaining 15 pregenerated mazes 
-            sixteenGraphs[i] = new MazeNode[8, 8];
-            Prim(sixteenGraphs[i], i + 1);
-        }
-
-    }
 
 
-    void DFS(MazeNode curr)
-    {
-        if (exitFound) return;
-        for (var i = 0; i < curr.neighbourNodes.Count; i++)
-        {
+            Instantiate(exitTilePrefab, new Vector3((xPos - 10 * exit.indexX), yPos, (zPos + 10 * exit.indexY)), Quaternion.identity); //make a colored exit tile
 
-            if (exitFound) return;
-            if (!(curr.neighbourNodes[i].visited)) //if not visited
+            //for (var i = 0; i < shortestPath.Count; i++)
+            //{ //now draw tiles leading to the path
+            //    Instantiate(pathTilePrefab, new Vector3((xPos - 10 * shortestPath[i].indexX), yPos, (zPos + 10 * shortestPath[i].indexY)), Quaternion.identity);
+            //}
+
+            for (var i = 0; i < 16; i++)
             {
-                curr.neighbourNodes[i].visited = true;
+                //creates the remaining 15 pregenerated mazes 
+                sixteenGraphs[i] = new MazeNode[8, 8];
+                Prim(sixteenGraphs[i], i + 1);
+            }
 
-                if (curr.neighbourNodes[i] == exit) //base case
+        } while (pathLength > 17 || pathLength <= 1); //for up to 16 steps, then the path from entry to exit may consist of a maximum of 17 tiles.
+                                                      //we also want the pathlength to be at least 2. 
+
+
+        void DFS(MazeNode curr)
+        {
+            if (exitFound) return;
+            for (var i = 0; i < curr.neighbourNodes.Count; i++)
+            {
+
+                if (exitFound) return;
+                if (!(curr.neighbourNodes[i].visited)) //if not visited
                 {
-                    myStack.Push(exit);
-                    savePath();
-                    exitFound = true;
-                    return;
+                    curr.neighbourNodes[i].visited = true;
+
+                    if (curr.neighbourNodes[i] == exit) //base case
+                    {
+                        myStack.Push(exit);
+                        savePath();
+                        exitFound = true;
+                        return;
+                    }
+                    myStack.Push(curr.neighbourNodes[i]);
+                    DFS(curr.neighbourNodes[i]);
                 }
-                myStack.Push(curr.neighbourNodes[i]);
-                DFS(curr.neighbourNodes[i]);
+
+            }
+            if (exitFound) return;
+            myStack.Pop();
+        }
+
+        void savePath()
+        {
+            Stack<MazeNode> myReverseStack = new Stack<MazeNode>();
+            var length = myStack.Count;
+            for (var i = 0; i < length; i++)
+            {
+                myReverseStack.Push(myStack.Pop());
+            }
+            for (var i = 0; i < length; i++)
+            {
+                shortestPath.Add(myReverseStack.Pop());
             }
 
         }
-        if (exitFound) return;
-        myStack.Pop();
     }
-
-    void savePath()
-    {
-        Stack<MazeNode> myReverseStack = new Stack<MazeNode>();
-        var length = myStack.Count;
-        for (var i = 0; i < length; i++)
-        {
-            myReverseStack.Push(myStack.Pop());
-        }
-        for (var i = 0; i < length; i++)
-        {
-            shortestPath.Add(myReverseStack.Pop());
-        }
-
-    }
-    //doorToMaze.gameObject.name = "entry";
 
     private void CreateMazeWalls(MazeNode[,] g)
     {
@@ -466,17 +458,14 @@ public class MazeGenerator2 : MonoBehaviour
                 restartingMaze = true;
                 RestartMaze();
                 //take player back to start
-                player.transform.position = new Vector3(100, 0, 450);
+                player.transform.position = new Vector3(108.5817f, 27.80485f, 466.0655f);
                 Instantiate(bigAssZombie, new Vector3(142.3f, 0, 321.5f), Quaternion.identity);
-                //for(var i = 0; i<50; i++)
-                //{
-                //    Instantiate(zombie, new Vector3(142.3f, 40, 321.5f), Quaternion.identity);
-                //}
 
             }
             if (Input.GetKeyDown("escape"))
             {
                 //restart maze
+                Debug.Log("ESCAPE DETECTED");
                 restartingMaze = true;
                 RestartMaze();
             }
@@ -485,16 +474,10 @@ public class MazeGenerator2 : MonoBehaviour
             if (stepCount > 16) //i allow 17 steps, because one step is counted to get into the maze, 16 more steps are allowed once 
                                //inside the maze
             {
-                //if(stepCount==16){
-                //checkif we reached the exit tile, if not then reset the maze
 
-                Debug.Log("BUSTED KIDDO");
+                Debug.Log("BUSTED KIDDO"); //you lose
                 restartingMaze = true;
                 RestartMaze();
-                //you lose
-
-                //start maze over again
-                //terminate maze
             }
             else if (stepTaken)
             {
@@ -524,16 +507,6 @@ public class MazeGenerator2 : MonoBehaviour
                 CreateMazeWalls(sixteenGraphs[stepCount - 1]);
             }
 
-
-
-
-           
-            //var gameObjects : GameObject[];
-            //gameObjects = GameObject.FindGameObjectsWithTag("yourTag");
-
-            //for (var i = 0; i < gameObjects.length; i++) { 
-            //Destroy(gameObjects[i]);
-            //}
         }
 
 

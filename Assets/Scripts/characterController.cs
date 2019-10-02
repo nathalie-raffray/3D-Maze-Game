@@ -20,6 +20,7 @@ public class characterController : MonoBehaviour
     //use CharacterController to customize gravity for jumping, as well as to use the isGrounded attribute.
     private CharacterController charController;
     private bool playerInsideMaze;
+    private bool win;
 
     // Start is called before the first frame update
     void Start()
@@ -37,16 +38,22 @@ public class characterController : MonoBehaviour
     void Update()
     {
 
-        float vertInput = Input.GetAxis("Vertical") * speed;
-        float horizInput = Input.GetAxis("Horizontal") * speed;
+        win = MazeGenerator2.win;
+         if (!win) //when the player won, no action should be possible
+        {
+            float vertInput = Input.GetAxis("Vertical") * speed;
+            float horizInput = Input.GetAxis("Horizontal") * speed;
 
-        Vector3 forwardMovement = transform.forward * vertInput;
-        Vector3 rightMovement = transform.right * horizInput;
+            Vector3 forwardMovement = transform.forward * vertInput;
+            Vector3 rightMovement = transform.right * horizInput;
 
-        charController.SimpleMove(forwardMovement + rightMovement);
+            charController.SimpleMove(forwardMovement + rightMovement);
 
 
-        JumpInput();
+            JumpInput();
+        }
+
+       
 
         //if escape is pressed the cursor will become visible again
         if (Input.GetKeyDown("escape")) Cursor.lockState = CursorLockMode.None;

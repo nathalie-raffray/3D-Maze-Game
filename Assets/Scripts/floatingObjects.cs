@@ -14,7 +14,7 @@ public class floatingObjects : MonoBehaviour
         //Creating the three floating Objects
         Instantiate(zombie, new Vector3(135, 45, 300), Quaternion.identity);
         Instantiate(zombie, new Vector3(115, 40, 250), Quaternion.identity);
-        Instantiate(zombie, new Vector3(155, 40, 330), Quaternion.identity);
+        Instantiate(zombie, new Vector3(155, 40, 250), Quaternion.identity);
     }
 
     // Update is called once per frame
