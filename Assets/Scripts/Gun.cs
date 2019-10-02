@@ -14,24 +14,19 @@ public class Gun : MonoBehaviour
 
     public bool bulletFired;
 
-    public int count;
+    public int count; //count will hold how many floating objects were shot
 
     public Camera fpsCam;
     public GameObject player;
 
     private bool playerInsideMaze;
-   // private bool keyDropped;
-  //  private int count;
-
-   // private bool bulletShot;
 
     // Start is called before the first frame update
     void Start()
     {
         count = 0;
         bulletFired = false;
-       // keyDropped = false;
-        //bulletShot = false;
+   
     }
 
 
@@ -45,17 +40,11 @@ public class Gun : MonoBehaviour
             bulletFired = true;
 
             GameObject bulletObject = Instantiate(bulletPrefab);
-            //StartCoroutine(Shoot());
-            //Shoot();
-            //GameObject bulletObject = Instantiate(bulletPrefab);
 
-            //bulletObject.transform.forward = fpsCam.transform.forward;
-            //bulletObject.transform.forward = player.transform.forward;
         }
         if((count == 3)){
-            Debug.Log("hey");
+           // Debug.Log("hey");
             Instantiate(key, new Vector3(135.33f, 50, 193.24f), Quaternion.identity);
-            // keyDropped = true;
             count = 4; ///that way we don't instantiate more keys
             //drop key
         }
@@ -70,20 +59,6 @@ public class Gun : MonoBehaviour
             
 
         yield return null;
-            //RaycastHit hit;
-            //if(Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range)){
-
-            ////if(hit.transform.tag == "killme"){
-            ////    Destroy(hit.transform.gameObject);
-            ////    count++;
-            ////}
-
-
-
-            ////Debug.Log(hit.transform.tag);
-            //}
-
-
 
 
         }

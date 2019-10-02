@@ -9,6 +9,7 @@ public class MazeGenerator2 : MonoBehaviour
     public GameObject treeWallPrefab;
     public GameObject pathTilePrefab;
     public GameObject exitTilePrefab;
+    public GameObject youWin;
     public GameObject bigAssZombie;
     public GameObject zombie;
 
@@ -26,14 +27,14 @@ public class MazeGenerator2 : MonoBehaviour
     private List<MazeNode> shortestPath = new List<MazeNode>();
     private bool exitFound;
 
-    private MazeNode[][,] sixteenGraphs = new MazeNode[16][, ];
+    private MazeNode[][,] fifteenGraphs = new MazeNode[16][, ];
 
     private GameObject player;
 
     private int stepCount;
     private bool stepTaken;
     private bool playerInsideMaze;
-    public static bool win;
+    public static bool win = false;
 
 
 
@@ -244,7 +245,7 @@ public class MazeGenerator2 : MonoBehaviour
         stepCount = 0;
         stepTaken = false;
         playerInsideMaze = false;
-        win = false;
+
 
         Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored. 
 
@@ -309,29 +310,30 @@ public class MazeGenerator2 : MonoBehaviour
 
             DFS(graph[4, 7]);
 
-            Debug.Log("exit, indexX: " + exit.indexX + "indexY: " + exit.indexY);
+            //Debug.Log("exit, indexX: " + exit.indexX + "indexY: " + exit.indexY);
 
             pathLength = shortestPath.Count;
 
 
-            Instantiate(exitTilePrefab, new Vector3((xPos - 10 * exit.indexX), yPos, (zPos + 10 * exit.indexY)), Quaternion.identity); //make a colored exit tile
+          
 
             //for (var i = 0; i < shortestPath.Count; i++)
             //{ //now draw tiles leading to the path
             //    Instantiate(pathTilePrefab, new Vector3((xPos - 10 * shortestPath[i].indexX), yPos, (zPos + 10 * shortestPath[i].indexY)), Quaternion.identity);
             //}
 
-            for (var i = 0; i < 16; i++)
+            for (var i = 0; i < 15; i++)
             {
                 //creates the remaining 15 pregenerated mazes 
-                sixteenGraphs[i] = new MazeNode[8, 8];
-                Prim(sixteenGraphs[i], i + 1);
+                fifteenGraphs[i] = new MazeNode[8, 8];
+                Prim(fifteenGraphs[i], i + 1);
             }
 
-        } while (pathLength > 17 || pathLength <= 1); //for up to 16 steps, then the path from entry to exit may consist of a maximum of 17 tiles.
+        } while (pathLength > 15 || pathLength <= 2); //for up to 16 steps, then the path from entry to exit may consist of a maximum of 17 tiles.
                                                       //we also want the pathlength to be at least 2. 
 
 
+        Instantiate(exitTilePrefab, new Vector3((xPos - 10 * exit.indexX), yPos, (zPos + 10 * exit.indexY)), Quaternion.identity); //make a colored exit tile
         void DFS(MazeNode curr)
         {
             if (exitFound) return;
@@ -424,7 +426,7 @@ public class MazeGenerator2 : MonoBehaviour
     {
         Vector3 pos = player.transform.position;
         playerInsideMaze = ((pos.x <= 174 && pos.x >= 96) && (pos.z <= 179 && pos.z >= 101));
-        //playerInsideMaze = !player.characterController.isGrounded;
+       
         if (playerInsideMaze && !restartingMaze)
         {
             //checking to see when the player is traversing tiles
@@ -436,9 +438,6 @@ public class MazeGenerator2 : MonoBehaviour
                     stepTaken = true;
                     stepCount++;
                     currentTile = hitTile;
-                    Debug.Log("HIT BY " + hitTile.transform.position);
-                    Debug.Log("CURRENT TILE " + currentTile.transform.position);
-                    Debug.Log("STEPCOUNT = " + stepCount);
 
                     if (((xPos - 10 * exit.indexX) == hitTile.transform.position.x) && ((zPos + 10 * exit.indexY) == hitTile.transform.position.z))
                     {
@@ -446,32 +445,28 @@ public class MazeGenerator2 : MonoBehaviour
                     }
                 }
 
-              
-
-                //Instantiate(tilePrefab, new Vector3((xPos - 10 * i), yPos, (zPos + 10 * j)), Quaternion.identity);
+             
             }
 
-            if (win)
+            if (win && stepCount <= 14)
             {
+
                 //notify winner
-                Debug.Log("WIN");
-                restartingMaze = true;
-                RestartMaze();
                 //take player back to start
                 player.transform.position = new Vector3(108.5817f, 27.80485f, 466.0655f);
                 Instantiate(bigAssZombie, new Vector3(142.3f, 0, 321.5f), Quaternion.identity);
+                Instantiate(youWin, new Vector3(142.3f, 39.6f, 341.5f), Quaternion.Euler(new Vector3(0, 180, 0)));
 
             }
             if (Input.GetKeyDown("escape"))
             {
                 //restart maze
-                Debug.Log("ESCAPE DETECTED");
                 restartingMaze = true;
                 RestartMaze();
             }
 
 
-            if (stepCount > 16) //i allow 17 steps, because one step is counted to get into the maze, 16 more steps are allowed once 
+            if (stepCount > 14) //i allow 17 steps, because one step is counted to get into the maze, 16 more steps are allowed once 
                                //inside the maze
             {
 
@@ -504,7 +499,7 @@ public class MazeGenerator2 : MonoBehaviour
                 {
                     Destroy(oldMazeWalls[i]);
                 }
-                CreateMazeWalls(sixteenGraphs[stepCount - 1]);
+                CreateMazeWalls(fifteenGraphs[stepCount - 1]);
             }
 
         }
@@ -512,7 +507,7 @@ public class MazeGenerator2 : MonoBehaviour
 
     }
 
-    private void RestartMaze()
+    private void RestartMaze() //RESTARTTTTTTTT DESTROOOYYYYYYYY
     {
 
         player.transform.position = new Vector3(135, 0, 185);

@@ -17,9 +17,4 @@ public class floatingObjects : MonoBehaviour
         Instantiate(zombie, new Vector3(155, 40, 250), Quaternion.identity);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

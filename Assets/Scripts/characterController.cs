@@ -6,15 +6,14 @@ public class characterController : MonoBehaviour
 {
 
     public float speed = 30.0F;
-    //public float jumpSpeed = 400.0F;
 
     private bool isJumping;
 
     public GameObject pathTilePrefab;
 
     //use AnimationCurve to specify how we jump
-    [SerializeField] private AnimationCurve jumpFallOff;
-    [SerializeField] private float jumpMultiplier;
+    public AnimationCurve jumpFallOff;
+    public float jumpMultiplier;
     [SerializeField] private KeyCode jumpKey;
 
     //use CharacterController to customize gravity for jumping, as well as to use the isGrounded attribute.
@@ -58,17 +57,6 @@ public class characterController : MonoBehaviour
         //if escape is pressed the cursor will become visible again
         if (Input.GetKeyDown("escape")) Cursor.lockState = CursorLockMode.None;
 
-        //135.33f, 50, 193.24f
-        //DELEEET LATER
-        //if(transform.position.x <=138 && transform.position.x >= 132 && transform.position.z <= 196 && transform.position.x >= 190)
-        //{
-        //    GameObject entry = GameObject.Find("entry");
-        //    Destroy(entry);
-        //    Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored.
-        //}
-
-
-
     }
     private bool goodToGo;
 
@@ -110,35 +98,17 @@ public class characterController : MonoBehaviour
 
             yield return null;
         } while (!charController.isGrounded);
-
-        //&& charController.collisionFlags != CollisionFlags.Above
-        //charController.collisionFlags != CollisionFlags.Above will make sure that if the character hits a collision object above, it will stop going up
-        //and instead fall back down. This won't really be useful for this assignment, but I add it nonetheless as it is generally important/useful. 
+        
 
         isJumping = false; //the jump has finished, player is grounded. 
 
     }
 
-    //void onTriggerEnter(Collider other)
-    //{
-    //    Debug.Log("collided");
-    //    if(other.tag == "key")
-    //    {
-    //        Destroy(other);
-    //        //open the fucking maze
-    //        //make the maze open at one point specified by root which is at index (7,4)
-    //        //if key drops
-    //        GameObject entry = GameObject.Find("entry");
-    //        Destroy(entry);
-    //        Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored.
-    //    }
-    //}
-
 
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        Debug.Log("collided");
+        //Debug.Log("collided");
         if (hit.gameObject.tag == "key")
         {
             Destroy(hit.gameObject);
@@ -152,7 +122,7 @@ public class characterController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "MazeTile"){
+        if(other.tag == "MazeTile"){ //this is to check if we change tiles in the maze
             MazeGenerator2.hitTile = other.gameObject;
         }
     }

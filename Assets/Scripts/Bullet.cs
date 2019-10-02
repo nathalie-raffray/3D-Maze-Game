@@ -19,22 +19,18 @@ public class Bullet : MonoBehaviour
         gun = GameObject.Find("Gun").GetComponent<Gun>();
         transform.position = GameObject.Find("Gun").transform.position; 
         transform.forward = GameObject.Find("Main Camera").transform.forward;
-        //transform.forward = capsule.transform.forward;
+      
         lifeTimer = lifeDuration;
    
-        //forward = GameObject.Find("Main Camera").transform.forward;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
    
-        //GameObject.Find("Capsule").transform.forward  + new Vector3(0, GameObject.Find("Capsule").transform.position.y, 0)
-        //Rigidbody rb = GetComponent<Rigidbody>();
-        //rb.AddForce(forward * speed);
 
         transform.position += transform.forward * speed * Time.deltaTime;
-        //transform.position += ( GameObject.Find("Main Camera").transform.forward  ) * speed * Time.deltaTime;
+       
 
 
         lifeTimer -= Time.deltaTime;
