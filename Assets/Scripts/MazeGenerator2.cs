@@ -8,6 +8,7 @@ public class MazeGenerator2 : MonoBehaviour
     public GameObject tilePrefab;
     public GameObject treeWallPrefab;
     public GameObject pathTilePrefab;
+    public GameObject exitTilePrefab;
     public GameObject bigAssZombie;
     public GameObject zombie;
 
@@ -302,6 +303,8 @@ public class MazeGenerator2 : MonoBehaviour
         {
 
             exit = getRandomExit();
+
+
             //exit = graph[6, 7];
 
 
@@ -319,6 +322,8 @@ public class MazeGenerator2 : MonoBehaviour
 
             pathLength = shortestPath.Count;
         }
+
+        Instantiate(exitTilePrefab, new Vector3((xPos - 10 * exit.indexX), yPos, (zPos + 10 * exit.indexY)), Quaternion.identity); //make a colored exit tile
 
         //for (var i = 0; i < shortestPath.Count; i++)
         //{ //now draw tiles leading to the path
@@ -419,6 +424,7 @@ public class MazeGenerator2 : MonoBehaviour
     private GameObject[] oldMazeWalls;
     public static GameObject hitTile;
     private GameObject currentTile;
+    private bool restartingMaze = false;
 
 
     // Update is called once per frame
@@ -427,23 +433,28 @@ public class MazeGenerator2 : MonoBehaviour
         Vector3 pos = player.transform.position;
         playerInsideMaze = ((pos.x <= 174 && pos.x >= 96) && (pos.z <= 179 && pos.z >= 101));
         //playerInsideMaze = !player.characterController.isGrounded;
-        if (playerInsideMaze)
+        if (playerInsideMaze && !restartingMaze)
         {
             //checking to see when the player is traversing tiles
             if (hitTile != null && hitTile != currentTile || hitTile != null && currentTile == null) //second condition is for when the player first enters
                                                                                                      //the maze and currentTile = null.
             {
-                stepTaken = true;
-                stepCount++;
-                currentTile = hitTile;
-                Debug.Log("HIT BY " + hitTile.transform.position);
-                Debug.Log("CURRENT TILE " + currentTile.transform.position);
-                Debug.Log("STEPCOUNT = " + stepCount);
-
-                if ( ((xPos - 10 * exit.indexX) == hitTile.transform.position.x) && ((zPos + 10 * exit.indexY) == hitTile.transform.position.z) )
+                if (!(stepCount == 0 && hitTile.transform.position != new Vector3(135, 0, 170)))  //temporary bug fix when escaping and reentering maze
                 {
-                    win = true;
+                    stepTaken = true;
+                    stepCount++;
+                    currentTile = hitTile;
+                    Debug.Log("HIT BY " + hitTile.transform.position);
+                    Debug.Log("CURRENT TILE " + currentTile.transform.position);
+                    Debug.Log("STEPCOUNT = " + stepCount);
+
+                    if (((xPos - 10 * exit.indexX) == hitTile.transform.position.x) && ((zPos + 10 * exit.indexY) == hitTile.transform.position.z))
+                    {
+                        win = true;
+                    }
                 }
+
+              
 
                 //Instantiate(tilePrefab, new Vector3((xPos - 10 * i), yPos, (zPos + 10 * j)), Quaternion.identity);
             }
@@ -452,6 +463,7 @@ public class MazeGenerator2 : MonoBehaviour
             {
                 //notify winner
                 Debug.Log("WIN");
+                restartingMaze = true;
                 RestartMaze();
                 //take player back to start
                 player.transform.position = new Vector3(100, 0, 450);
@@ -465,6 +477,7 @@ public class MazeGenerator2 : MonoBehaviour
             if (Input.GetKeyDown("escape"))
             {
                 //restart maze
+                restartingMaze = true;
                 RestartMaze();
             }
 
@@ -476,6 +489,7 @@ public class MazeGenerator2 : MonoBehaviour
                 //checkif we reached the exit tile, if not then reset the maze
 
                 Debug.Log("BUSTED KIDDO");
+                restartingMaze = true;
                 RestartMaze();
                 //you lose
 
@@ -561,5 +575,6 @@ public class MazeGenerator2 : MonoBehaviour
         }
         Start();
         Destroy(GameObject.Find("entry"));
+        restartingMaze = false;
     }
 }

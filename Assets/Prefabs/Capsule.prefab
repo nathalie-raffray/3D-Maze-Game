@@ -19,7 +19,7 @@ MonoBehaviour:
   bulletFired: 0
   count: 0
   fpsCam: {fileID: 7569993773307959904}
-  capsule: {fileID: 7569993773971762692}
+  player: {fileID: 7569993773971762692}
 --- !u!1 &7569993773307959934
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
-  pathTilePrefab: {fileID: 8583711793108290644, guid: 7e78d4069accb428280a6362684e7fb3,
+  pathTilePrefab: {fileID: 784568024632932706, guid: f4f307585b5ec4745a5088382c45c96a,
     type: 3}
   jumpFallOff:
     serializedVersion: 2
@@ -252,7 +252,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  jumpMultiplier: 20
+  jumpMultiplier: 30
   jumpKey: 32
 --- !u!143 &7569993773971762699
 CharacterController:

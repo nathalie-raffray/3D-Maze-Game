@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\Key.cs" />
     <Compile Include="Assets\Scripts\MazeGenerator2.cs" />
     <Compile Include="Assets\Scripts\Target.cs" />
+    <None Include="Assets\README.txt" />
     <None Include="Assets\Models\Key\readME keys.txt" />
     <None Include="Assets\sci-fi-weapons\README.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
