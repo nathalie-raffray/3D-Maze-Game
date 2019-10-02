@@ -98,18 +98,47 @@ public class characterController : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+    //void onTriggerEnter(Collider other)
+    //{
+    //    Debug.Log("collided");
+    //    if(other.tag == "key")
+    //    {
+    //        Destroy(other);
+    //        //open the fucking maze
+    //        //make the maze open at one point specified by root which is at index (7,4)
+    //        //if key drops
+    //        GameObject entry = GameObject.Find("entry");
+    //        Destroy(entry);
+    //        Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored.
+    //    }
+    //}
+
+
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Debug.Log("collided");
-        if(collision.gameObject.tag == "key")
+        if (hit.gameObject.tag == "key")
         {
-            Destroy(collision.gameObject);
+            Destroy(hit.gameObject);
             //open the fucking maze
             //make the maze open at one point specified by root which is at index (7,4)
             //if key drops
             GameObject entry = GameObject.Find("entry");
             Destroy(entry);
             Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored.
+        }
+
+        //if(hit.gameObject.tag == "MazeTile")
+        //{
+        //    MazeGenerator2.hitTile = hit.gameObject;
+        //}
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "MazeTile"){
+            MazeGenerator2.hitTile = other.gameObject;
         }
     }
 }

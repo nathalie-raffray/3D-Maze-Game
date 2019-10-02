@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7108590409281602511}
   - component: {fileID: 8838878477774445960}
   - component: {fileID: 8948649727422491954}
+  - component: {fileID: 1259762000098417763}
   m_Layer: 9
   m_Name: pathMazeTile
   m_TagString: MazeTile
@@ -77,3 +78,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &1259762000098417763
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8583711793108290644}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.72680855, y: 50.165478, z: 0.74656683}
+  m_Center: {x: -0.0037233352, y: 23.568695, z: -0.0005721808}

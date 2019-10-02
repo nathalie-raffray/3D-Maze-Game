@@ -35,6 +35,21 @@ public class Key : MonoBehaviour
     //{
     //    if (collision.gameObject.tag == "Player")
     //    {
+    //        Debug.Log("FUCKYEAH");
+    //        GameObject entry = GameObject.Find("entry");
+    //        Destroy(entry);
+    //        Destroy(this.gameObject);
+    //        //open the fucking maze
+    //        //make the maze open at one point specified by root which is at index (7,4)
+    //        //if key drops
+
+    //    }
+    //}
+    //void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.tag == "Player")
+    //    {
+    //        Debug.Log("FUCKYEAH");
     //        GameObject entry = GameObject.Find("entry");
     //        Destroy(entry);
     //        Destroy(this.gameObject);

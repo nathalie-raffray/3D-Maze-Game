@@ -32,6 +32,7 @@ public class MazeGenerator2 : MonoBehaviour
     private GameObject player;
 
 
+
     public class MazeNode
     {
 
@@ -242,6 +243,7 @@ public class MazeGenerator2 : MonoBehaviour
     {
 
         player = GameObject.Find("Capsule");
+
         Instantiate(pathTilePrefab, new Vector3(135, 0, 170), Quaternion.identity); //the first tile when you enter is colored. 
 
         for (var i = 0; i < 8; i++)
@@ -250,8 +252,10 @@ public class MazeGenerator2 : MonoBehaviour
             {
                 //instantiate the tiles
                 Instantiate(tilePrefab, new Vector3((xPos - 10 * i), yPos, (zPos + 10 * j)), Quaternion.identity);
+
             }
         }
+
 
         GameObject doorToMaze; //this is the tree wall which will disappear upon obtaining the key. 
         for (var i = 0; i < 8; i++) //make trees surround the whole maze
@@ -274,6 +278,8 @@ public class MazeGenerator2 : MonoBehaviour
 
 
         Prim(graph, 0);
+
+
 
         CreateMazeWalls(graph);
 
@@ -402,46 +408,61 @@ public class MazeGenerator2 : MonoBehaviour
     private bool stepTaken = false;
     private bool playerInsideMaze = false;
     private GameObject[] oldMazeWalls;
+    //private GameObject currentTile;
+    public static GameObject hitTile;
+    private GameObject currentTile;
 
     // Update is called once per frame
     void Update()
     {
         Vector3 pos = player.transform.position;
         playerInsideMaze = ((pos.x <= 174 && pos.x >= 96) && (pos.z <= 179 && pos.z >= 101));
+        //playerInsideMaze = !player.characterController.isGrounded;
         if (playerInsideMaze)
         {
             //checking to see when the player is traversing tiles
-            if (pos.x <= minLimitX)
+            if(hitTile != null && hitTile != currentTile || hitTile!=null && currentTile==null) //second condition is for when the player first enters
+                                                                                                //the maze and currentTile = null.
             {
-                minLimitX -= 10;
-                maxLimitX -= 10;
-                stepCount++;
                 stepTaken = true;
-            }
-            else if (pos.x >= maxLimitX)
-            {
-                minLimitX += 10;
-                maxLimitX += 10;
                 stepCount++;
-                stepTaken = true;
-            }
-            else if (pos.x <= minLimitZ)
-            {
-                minLimitZ -= 10;
-                maxLimitZ -= 10;
-                stepCount++;
-                stepTaken = true;
-            }
-            else if (pos.x >= maxLimitZ)
-            {
-                minLimitZ += 10;
-                maxLimitZ += 10;
-                stepCount++;
-                stepTaken = true;
+                currentTile = hitTile;
             }
 
-            if (stepCount > 16)
+            //if (pos.x <= minLimitX)
+            //{
+            //    minLimitX -= 10;
+            //    maxLimitX -= 10;
+            //    stepCount++;
+            //    stepTaken = true;
+            //}
+            //else if (pos.x >= maxLimitX)
+            //{
+            //    minLimitX += 10;
+            //    maxLimitX += 10;
+            //    stepCount++;
+            //    stepTaken = true;
+            //}
+            //else if (pos.x <= minLimitZ)
+            //{
+            //    minLimitZ -= 10;
+            //    maxLimitZ -= 10;
+            //    stepCount++;
+            //    stepTaken = true;
+            //}
+            //else if (pos.x >= maxLimitZ)
+            //{
+            //    minLimitZ += 10;
+            //    maxLimitZ += 10;
+            //    stepCount++;
+            //    stepTaken = true;
+            //}
+
+            if (stepCount >= 16)
             {
+                //if(stepCount==16){
+                //checkif we reached the exit tile, if not then reset the maze
+
                 //start maze over again
                 //terminate maze
             }
