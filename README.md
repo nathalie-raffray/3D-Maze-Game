@@ -1,7 +1,23 @@
+# 3D Maze Game
 
-FOR UR BENEFIT: when you're playing the game, to make your cursor visible again, press "escape"
+3D Maze constructed with Prim's Algorithm, where the 3rd dimension is time.
+Dynamically and randomly generated to be (highly likely) different in each play.
 
-Note: Although you can move and jump higher than the maze itself from outside the maze, you will not be able to jump in the maze because I placed colliders over the trees. Whilst in the maze you will not be able to jump and move. 
+*Controls*: 
+jump: space
+shoot: LMB
+make cursor visible again: escape 
+move: WASD
+
+To gain access to the maze, shoot the 3 objects floating in the air and a key will fall down. Once you walk over the key, you will "pick it up" and the maze will be open.
+
+Each step taken in the maze, will be one step taken in the time dimension and the maze will change. You can think of this as moving up a level in a cube. You may jump in the maze to look at the tiles around you. 
+
+Practically, this means the maze is pretty hard to solve. I have colored the tiles that lead to the solution blue, so follow those tiles to win. If you take 16 steps without solving the maze, the maze will restart and you will be taken back to the start. 
+
+This project was an exercise to think of time as a dimension in video games. 
+
+*Questions*:
 
 What algorithm have you used to create a maze?
 What makes it random and dynamic?
@@ -10,15 +26,6 @@ I decided to use Prim's algorithm to create the maze. What makes it random is th
 How have you tracked the path solving it? 
 What I ended up doing was creating the first iteration of the MST beforehand, and then randomly picking a exit tile. After this I ran DFS from the root tile, keeping track of the path, and stopping once I reached the exit tile. Because there are no cycles, there is only one path to the exit tile, so DFS would give me that path. 
 
-Why have I chosen pre-existing assets? 
-Lack of time and because, I want the game to be good looking, partly because I am spending ~40 hours looking at it and debugging it :-)
-Here are the list of Assets I have used:
-TREE: by PIXEL PROCESSOR
-KEY: by ROBOCG
-ZOMBIE: by PXLTIGER
-GUN: by MARIO HABERLE
-
-I think the most difficult challenge was understanding the assignment instructions. I only really understood what I was supposed to code for the maze after talking to a TA. Also my computer sucks and can barely run Unity, another challenge. 
 
 
 
