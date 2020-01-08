@@ -23,11 +23,11 @@ This project was an exercise to think of time as a dimension in video games.
 
 *Questions*:
 
-What algorithm have you used to create a maze? What makes it random and dynamic?
+**What algorithm have you used to create a maze? What makes it random and dynamic?**
 
 I decided to use Prim's algorithm to create the maze. What makes it random is that to build the MST, I pick a random frontier neighbour, and in turn that frontier neighbour will pick a random "in neighbour" (a neighbour that is already in the MST), and then join itself to that neighbour. For the 16 steps in the time dimension, I pregenerated the maze 16 times with Prim's algorithm, to assure there would be no situation where the player would get "stuck" -- this allows for expansive movement around the maze at each step (because every tile is accessible!)
 
-How have you tracked the path solving it? 
+**How have you tracked the path solving it?** 
 
 What I ended up doing was creating the first iteration of the MST beforehand, and then randomly picking a exit tile. After this I ran DFS from the root tile, keeping track of the path, and stopping once I reached the exit tile. Because there are no cycles, there is only one path to the exit tile, so DFS would give me that path. 
 
