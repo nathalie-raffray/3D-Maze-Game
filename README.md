@@ -4,9 +4,13 @@
 Dynamically and randomly generated to be (highly likely) different in each play.
 
 *Controls*: 
+
 jump: space
+
 shoot: LMB
+
 make cursor visible again: escape 
+
 move: WASD
 
 To gain access to the maze, shoot the 3 objects floating in the air and a key will fall down. Once you walk over the key, you will "pick it up" and the maze will be open.
